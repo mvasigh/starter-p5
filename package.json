@@ -1,0 +1,17 @@
+{
+  "name": "starter-p5",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "p5": "^1.2.0",
+    "preact": "^10.5.9"
+  },
+  "devDependencies": {
+    "@prefresh/vite": "^2.0.0",
+    "vite": "^2.0.0-beta.50"
+  }
+}
