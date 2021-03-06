@@ -2,10 +2,12 @@
   "name": "starter-p5",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev:client": "vite",
     "dev:server": "nodemon server.mjs",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "start": "NODE_ENV=production node server.mjs"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@prefresh/vite": "^2.0.0",
+    "concurrently": "^6.0.0",
     "nodemon": "^2.0.7",
     "vite": "^2.0.0-beta.50"
   }

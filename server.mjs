@@ -18,7 +18,7 @@ function createStaticServer() {
 
   return new Promise((resolve) => {
     app.listen(port, () => {
-      console.log(`    Started static server at: http://localhost:${port}`);
+      console.log(`    Static:     http://localhost:${port}`);
       resolve(app);
     });
   });
@@ -28,7 +28,7 @@ function createWsServer() {
   const port = WS_PORT ?? 8080;
   const wsServer = new WebSocket.Server({ port });
 
-  console.log(`    Started WS server at: ws://localhost:${port}`);
+  console.log(`    WebSocket:  ws://localhost:${port}`);
   return Promise.resolve(wsServer);
 }
 
@@ -41,17 +41,24 @@ function createOscServer() {
   });
   return new Promise((resolve) => {
     oscServer.on("ready", () => {
-      console.log(`    Started OSC server at: http://localhost:${localPort}`);
+      console.log(`    OSC:        http://localhost:${localPort}`);
       resolve(oscServer);
     });
     oscServer.open();
   });
 }
 
-console.log(`🌈  Starting the server...`);
-await createStaticServer();
-const wss = await createWsServer();
+console.clear();
+console.log('\n');
+console.log(`🌈  Starting client messaging server...\n`);
+
+if (process.env.NODE_ENV === 'production') {
+  await createStaticServer();
+}
 const oscs = await createOscServer();
+const wss = await createWsServer();
+
+console.log('\n');
 
 oscs.on("message", (oscMsg, timeTag, info) => {
   if (VERBOSE_LOGS) {
