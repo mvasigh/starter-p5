@@ -3,15 +3,20 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "dev:server": "nodemon server.mjs",
     "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
+    "osc": "^2.4.1",
     "p5": "^1.2.0",
-    "preact": "^10.5.9"
+    "preact": "^10.5.9",
+    "ws": "^7.4.3"
   },
   "devDependencies": {
     "@prefresh/vite": "^2.0.0",
+    "nodemon": "^2.0.7",
     "vite": "^2.0.0-beta.50"
   }
 }
