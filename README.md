@@ -28,6 +28,9 @@ And finally, run the server in production mode, which serves static files as wel
 $ npm run start
 ```
 
+### Environment variables
+You can customize the ports used by various parts of the project using a handful of environment variables. Take a look at `.env.sample` for a list of the available configuration options.
+
 ### Questions?
 This repo is mostly for my personal use, but if you use it and have any questions, please open an issue in this repository!
 
