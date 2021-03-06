@@ -50,7 +50,7 @@ function createOscServer() {
 
 console.clear();
 console.log('\n');
-console.log(`🌈  Starting client messaging server...\n`);
+console.log(`🌈  Starting message server...\n`);
 
 if (process.env.NODE_ENV === 'production') {
   await createStaticServer();
@@ -62,14 +62,12 @@ console.log('\n');
 
 oscs.on("message", (oscMsg, timeTag, info) => {
   if (VERBOSE_LOGS) {
-    console.log({ oscMsg, timeTag, info });
+    console.log(`[${info.address}] address: ${oscMsg.address} | args: ${JSON.stringify(oscMsg.args)}`)
   }
 
+  const message = JSON.stringify({ oscMsg, timeTag });
+
   wss.clients.forEach((client) => {
-    client.send({
-      oscMsg,
-      timeTag,
-      info,
-    });
+    client.send(message);
   });
 });
