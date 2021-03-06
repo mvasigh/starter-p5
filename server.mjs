@@ -1,14 +1,33 @@
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import * as dotenv from "dotenv";
 import osc from "osc";
 import WebSocket from "ws";
-import * as dotenv from "dotenv";
+import express from "express";
 
 dotenv.config();
 
-const { OSC_PORT, WS_PORT } = process.env;
+const { OSC_PORT, WS_PORT, STATIC_PORT, VERBOSE_LOGS } = process.env;
+
+function createStaticServer() {
+  const staticPath = dirname(fileURLToPath(import.meta.url)) + "/dist";
+  const port = STATIC_PORT ?? 8081;
+  const app = express();
+
+  app.use("/", express.static(staticPath));
+
+  return new Promise((resolve) => {
+    app.listen(port, () => {
+      console.log(`    Started static server at: http://localhost:${port}`);
+      resolve(app);
+    });
+  });
+}
 
 function createWsServer() {
   const port = WS_PORT ?? 8080;
   const wsServer = new WebSocket.Server({ port });
+
   console.log(`    Started WS server at: ws://localhost:${port}`);
   return Promise.resolve(wsServer);
 }
@@ -30,20 +49,20 @@ function createOscServer() {
 }
 
 console.log(`🌈  Starting the server...`);
+await createStaticServer();
 const wss = await createWsServer();
 const oscs = await createOscServer();
 
 oscs.on("message", (oscMsg, timeTag, info) => {
-  console.log(`Received a new OSC message!`);
-  console.log({ oscMsg, timeTag, info });
-
-  console.log(oscMsg.args);
+  if (VERBOSE_LOGS) {
+    console.log({ oscMsg, timeTag, info });
+  }
 
   wss.clients.forEach((client) => {
-    client.send("I got an OSC message");
+    client.send({
+      oscMsg,
+      timeTag,
+      info,
+    });
   });
 });
-
-setInterval(() => {
-  wss.clients.forEach(client => client.send(Date.now()))
-}, 1000)
