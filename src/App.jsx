@@ -1,9 +1,13 @@
-import P5 from "./P5";
+import { Suspense, lazy } from "preact/compat";
+
+const P5 = lazy(() => import("./P5"));
 
 export function App(props) {
   return (
     <div className="container">
-      <P5 />
+      <Suspense fallback={<span>Loading...</span>}>
+        <P5 />
+      </Suspense>
     </div>
   );
 }
